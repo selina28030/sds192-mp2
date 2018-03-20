@@ -5,6 +5,7 @@ date: "October 31, 2017"
 output: html_document
 ---
 
+library(tidyverse)
 
 ## Loading the data
 
@@ -17,4 +18,52 @@ load("candidates.rda")
 load("committees.rda")
 load("contributions.rda")
 ```
-I am trying this again! 
+View(house_elections)
+View(candidates)
+View(committees)
+View(contributions)
+
+#Only trying to get the people who have ran twice.
+rantwice <- house_elections %>%
+  group_by(candidate_name) %>%
+  summarize(N = n()) %>%
+  filter(N == 2)
+
+twice <- house_elections %>%
+  filter(incumbent == "TRUE")
+
+View(twice)
+View(rantwice)
+
+#Now trying to get the contributions made by each committee. we'll have to merge tables :'(((
+
+
+contribution_filtered <- contributions %>%
+  select(cmte_id, transaction_amt, cand_id)
+View(contribution_filtered)
+
+committee_premerge <- committees %>%
+  select(cmte_name, cmte_id, cand_id)
+  
+View(committee_premerge)
+
+merged_data <- full_join(contribution_filtered, committee_premerge, by = "cmte_id")
+
+View(merged_data)
+
+#how do we merge the committee and the candidate?
+
+merged_data2 <- merged_data %>%
+  mutate(cand_id = cand_id.x)
+
+View(merged_data2)
+
+premerge_twice <- mutate(twice, cand_name = candidate_name)
+
+View(premerge_twice)
+  
+rantwice <- full_join(premerge_twice, candidates, by = "cand_name") %>%
+  filter(incumbent == "TRUE")
+
+View(rantwice)
+
