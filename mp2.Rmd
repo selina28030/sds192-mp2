@@ -61,9 +61,24 @@ View(merged_data2)
 premerge_twice <- mutate(twice, cand_name = candidate_name)
 
 View(premerge_twice)
+
+candidate_name <- candidates %>%
+select(cand_id, cand_name)
+
+View(candidate_name)
+
+state_premerge <- candidates %>%
+mutate(state = cand_state)
   
-rantwice <- full_join(premerge_twice, candidates, by = "cand_name") %>%
+rantwice <- full_join(premerge_twice, state_premerge, by = "state") %>%
   filter(incumbent == "TRUE")
 
 View(rantwice)
+
+ran_twice_shortened <- rantwice %>%
+select()
+group_by(candidate_name) %>%
+summarize()
+
+View(ran_twice_shortened)
 
