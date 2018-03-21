@@ -121,3 +121,8 @@ View(wowow)
 
 ggplot(wowow, aes(x=cand_name, y = transaction_amt))+
 geom_point()
+
+keepsuperpaccommittees <- filter(keepcommittees, cmte_type == "O")
+
+
+
