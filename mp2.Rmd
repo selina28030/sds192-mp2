@@ -23,6 +23,9 @@ View(candidates)
 View(committees)
 View(contributions)
 
+glimpse(individuals)
+
+
 #Only trying to get the people who have ran twice.
 rantwice <- house_elections %>%
   group_by(candidate_name) %>%
@@ -91,3 +94,21 @@ group_by(cand_name) %>%
 summarize()
 
 View(newdata)
+
+keepindviduals <- select(individuals, cmte_id, transaction_pgi, entity_type, name, city, state, zip_code, transaction_dt, transaction_amt) 
+
+keepcontributions <- select(contributions, cmte_id, transaction_pgi, entity_type, name, city, state, zip_code, transaction_dt, transaction_amt, other_id, cand_id)
+
+keepcandidates <- select(candidates, cand_id, cand_name, cand_party_affiliation, cand_election_yr, cand_office_state, cand_office, cand_office_district, cand_ici, cand_pcc)
+
+keepcommittees <- select(committees, cmte_id, cmte_name, cmte_city, cmte_state, cmte_zip, cmte_dsgn, cmte_type, cmte_party_affiliation, cand_id)
+
+wowow <- full_join(keepcontributions, keepcandidates)
+
+howhow <- full_join(wowow, keephouse_elections)
+
+keephouse_elections <- rename(house_elections, cand_id = fec_id)
+
+watwat <- full_join(keephouse_elections, keepcandidates)
+
+#push push push
