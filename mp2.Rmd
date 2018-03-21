@@ -75,3 +75,19 @@ superpac_money_clean <- superpac_money %>%
 group_by(cand_name.x, cmte_id,cmte_name) %>%
 summarize(total = sum(transaction_amt))
 View(superpac_money_clean)
+
+nonasuperpac_money_clean <- na.omit(superpac_money_clean)
+
+ggplot(nona_party_superpac_money, aes(x = cand_name.x, y = total, color = cmte_name)) + 
+  geom_point() +
+  facet_wrap(~ cand_party_affiliation.x)
+
+  
+party_superpac_money <- superpac_money %>%
+group_by(cand_name.x, cmte_id,cmte_name, cand_party_affiliation.x) %>%
+summarize(total = sum(transaction_amt))
+
+nona_party_superpac_money <- na.omit(party_superpac_money)
+View(nona_party_superpac_money)
+
+nona_party_superpac_money
