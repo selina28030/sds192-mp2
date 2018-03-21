@@ -110,5 +110,14 @@ howhow <- full_join(wowow, keephouse_elections)
 keephouse_elections <- rename(house_elections, cand_id = fec_id)
 
 watwat <- full_join(keephouse_elections, keepcandidates)
+watwat %>%
+select(incumbent == "TRUE")
 
 #push push push
+
+View(wowow)
+
+
+
+ggplot(wowow, aes(x=cand_name, y = transaction_amt))+
+geom_point()
