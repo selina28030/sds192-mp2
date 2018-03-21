@@ -18,82 +18,6 @@ load("candidates.rda")
 load("committees.rda")
 load("contributions.rda")
 ```
-View(house_elections)
-View(candidates)
-View(committees)
-View(contributions)
-
-glimpse(individuals)
-
-
-#Only trying to get the people who have ran twice.
-rantwice <- house_elections %>%
-  group_by(candidate_name) %>%
-  summarize(N = n()) %>%
-  filter(N == 2)
-
-twice <- house_elections %>%
-  filter(incumbent == "TRUE")
-
-View(twice)
-View(rantwice)
-
-#Now trying to get the contributions made by each committee. we'll have to merge tables :'(((
-
-
-contribution_filtered <- contributions %>%
-  select(cmte_id, transaction_amt, cand_id)
-View(contribution_filtered)
-
-committee_premerge <- committees %>%
-  select(cmte_name, cmte_id, cand_id)
-  
-View(committee_premerge)
-
-merged_data <- full_join(contribution_filtered, committee_premerge, by = "cmte_id")
-
-View(merged_data)
-
-#how do we merge the committee and the candidate?
-
-merged_data2 <- merged_data %>%
-  mutate(cand_id = cand_id.x)
-
-View(merged_data2)
-
-premerge_twice <- mutate(twice, cand_name = candidate_name)
-
-View(premerge_twice)
-
-candidate_name <- candidates %>%
-select(cand_id, cand_name)
-
-View(candidate_name)
-
-state_premerge <- candidates %>%
-mutate(state = cand_state)
-  
-rantwice <- full_join(premerge_twice, state_premerge, by = "state") %>%
-  filter(incumbent == "TRUE")
-
-View(rantwice)
-
-ran_twice_shortened <- rantwice %>%
-select()
-group_by(candidate_name) %>%
-summarize()
-
-View(ran_twice_shortened)
-
-tryagain <- full_join(merged_data2, candidate_name, by= "cand_id"")
-View(tryagain)
-
-
-newdata <- tryagain %>%
-group_by(cand_name) %>%
-summarize()
-
-View(newdata)
 
 keepindviduals <- select(individuals, cmte_id, transaction_pgi, entity_type, name, city, state, zip_code, transaction_dt, transaction_amt) 
 
@@ -116,8 +40,11 @@ select(incumbent == "TRUE")
 #push push push
 
 View(wowow)
+View(watwat)
 
+incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
 
-
-ggplot(wowow, aes(x=cand_name, y = transaction_amt))+
-geom_point()
+View(incumbent_money)
+ggplot(incumbent_money, aes(x=candidate_name, y = transaction_amt))+
+geom_point()+
+facet_grid(.~incumbent)
