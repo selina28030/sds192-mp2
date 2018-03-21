@@ -40,6 +40,8 @@ select(incumbent == "TRUE")
 #push push push
 
 View(wowow)
+
+View(wowow)
 View(watwat)
 
 incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
@@ -48,3 +50,22 @@ View(incumbent_money)
 ggplot(incumbent_money, aes(x=candidate_name, y = transaction_amt))+
 geom_point()+
 facet_grid(.~incumbent)
+View(watwat)
+
+incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
+
+<<<<<<< HEAD
+View(incumbent_money)
+ggplot(incumbent_money, aes(x=candidate_name, y = transaction_amt))+
+geom_point()+
+facet_grid(.~incumbent)
+=======
+
+ggplot(wowow, aes(x=cand_name, y = transaction_amt))+
+geom_point()
+
+keepsuperpaccommittees <- filter(keepcommittees, cmte_type == "O")
+
+
+
+>>>>>>> a512c963e19cafeab14e343e20d9248d7f7c6ac6
