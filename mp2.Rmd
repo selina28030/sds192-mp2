@@ -76,7 +76,7 @@ View(superpac_money)
 >>>>>>> a512c963e19cafeab14e343e20d9248d7f7c6ac6
 =======
 superpac_money_clean <- superpac_money %>%
-group_by(cand_name.x, cmte_id,cmte_name) %>%
+group_by(cand_name.x, cmte_id,cmte_name, incumbent) %>%
 summarize(total = sum(transaction_amt))
 View(superpac_money_clean)
 <<<<<<< HEAD
@@ -89,13 +89,23 @@ ggplot(nona_party_superpac_money, aes(x = cand_name.x, y = total, color = cmte_n
 
   
 party_superpac_money <- superpac_money %>%
-group_by(cand_name.x, cmte_id,cmte_name, cand_party_affiliation.x) %>%
+group_by(cand_name.x, cand_party_affiliation.x, incumbent) %>%
 summarize(total = sum(transaction_amt))
+
+eh <- party_superpac_money %>%
+-filter(cand_party_affiliation.x == "REP", "DEM")
 
 nona_party_superpac_money <- na.omit(party_superpac_money)
 View(nona_party_superpac_money)
 
-nona_party_superpac_money
+nona_party_superpac_money 
+
+graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total)) +
+geom_point() +
+facet_grid(.~incumbent) +
+facet_grid(cand_party_affiliation.x~.)
+
+graph1
 =======
 >>>>>>> f6f9127d94d0bde2b9bb336e473c28ac892214f6
 >>>>>>> 891fc0b7ab5c29a06a435a633ddd1e125edf0059
