@@ -59,7 +59,6 @@ View(incumbent_money)
 ggplot(incumbent_money, aes(x=candidate_name, y = transaction_amt))+
 geom_point()+
 facet_grid(.~incumbent)
-=======
 
 ggplot(wowow, aes(x=cand_name, y = transaction_amt))+
 geom_point()
@@ -71,4 +70,8 @@ View(keepsuperpaccommittees)
 superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by="cmte_id")
 
 View(superpac_money)
->>>>>>> a512c963e19cafeab14e343e20d9248d7f7c6ac6
+
+superpac_money_clean <- superpac_money %>%
+group_by(cand_name.x, cmte_id) %>%
+summarize()
+View(superpac_money_clean)
