@@ -66,6 +66,9 @@ geom_point()
 
 keepsuperpaccommittees <- filter(keepcommittees, cmte_type == "O")
 
+View(keepsuperpaccommittees)
 
+superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by="cmte_id")
 
+View(superpac_money)
 >>>>>>> a512c963e19cafeab14e343e20d9248d7f7c6ac6
