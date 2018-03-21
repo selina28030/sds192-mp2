@@ -82,6 +82,12 @@ summarize()
 
 View(ran_twice_shortened)
 
-tryagain <- full_join(merged_data2, candidate_name, by= "cand_id""
+tryagain <- full_join(merged_data2, candidate_name, by= "cand_id"")
 View(tryagain)
 
+
+newdata <- tryagain %>%
+group_by(cand_name) %>%
+summarize()
+
+View(newdata)
