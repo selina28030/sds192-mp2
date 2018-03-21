@@ -70,6 +70,13 @@ superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by="cmte_id
 
 View(superpac_money)
 
+<<<<<<< HEAD
 
 
 >>>>>>> a512c963e19cafeab14e343e20d9248d7f7c6ac6
+=======
+superpac_money_clean <- superpac_money %>%
+group_by(cand_name.x, cmte_id,cmte_name) %>%
+summarize(total = sum(transaction_amt))
+View(superpac_money_clean)
+>>>>>>> f6f9127d94d0bde2b9bb336e473c28ac892214f6
