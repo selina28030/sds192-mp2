@@ -1,8 +1,11 @@
 ---
 title: "Mini-Project 2"
-author: "Your Name Here"
-date: "October 31, 2017"
-output: html_document
+author: "Isabel Gomez & Selina Ho"
+date: "March 24, 2018"
+output: 
+  html_document:
+    code_folding: hide
+    
 ---
 
 ```{r, include=FALSE}
@@ -13,8 +16,7 @@ load("committees.rda")
 load("contributions.rda")
 ```
 
-keepindviduals <- select(individuals, cmte_id, transaction_pgi, entity_type, name, city, state, zip_code, transaction_dt, transaction_amt) 
-
+```{r, message=FALSE, warning = FALSE}
 keepcontributions <- select(contributions, cmte_id, transaction_pgi, entity_type, name, city, state, zip_code, transaction_dt, transaction_amt, other_id, cand_id)
 
 keepcandidates <- select(candidates, cand_id, cand_name, cand_party_affiliation, cand_election_yr, cand_office_state, cand_office, cand_office_district, cand_ici, cand_pcc)
@@ -29,37 +31,51 @@ watwat <- full_join(keephouse_elections, keepcandidates)
 
 incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
 
-
-incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
-
 keepsuperpaccommittees <- filter(keepcommittees, cmte_type == "O")
 
 superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by="cmte_id")
-
-View(superpac_money)
-
-
-nonasuperpac_money_clean <- na.omit(superpac_money_clean)
-
-ggplot(nona_party_superpac_money, aes(x = cand_name.x, y = total, color = cmte_name)) + 
-  geom_point() +
-  facet_wrap(~ cand_party_affiliation.x)
-
-  
+```
+```{r, message=FALSE, warning = FALSE}
 party_superpac_money <- superpac_money %>%
 group_by(cand_name.x, cand_party_affiliation.x, incumbent, ge_winner) %>%
 summarize(total = sum(transaction_amt))
 
-View(party_superpac_money)
-
 nona_party_superpac_money <- na.omit(party_superpac_money) %>%
 filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
-View(nona_party_superpac_money)
-
-
 
 graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
-geom_point() +
-facet_wrap(cand_party_affiliation.x~incumbent)
+  geom_point() +  
+  xlab("Major Categories")+
+  facet_wrap(cand_party_affiliation.x~incumbent)+
+  scale_y_continuous(name="Total Super PAC Money in U.S. Currency", labels = scales::comma)+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  scale_color_discrete(name = "Results", labels= c("Lost", "Won"))+
+  ggtitle("Doomed are the Fuller Pockets: The Relationship Between Party, Incumbency, Super PAC Contributions and Electoral Success")
 
 graph1
+```
+```{r, message=FALSE}
+money_per_party <- superpac_money %>%
+  group_by(cand_party_affiliation.x, incumbent, cmte_id) %>%
+  summarize(total = sum(transaction_amt)) %>%
+  na.omit %>%
+  filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
+
+
+ah <- money_per_party %>%
+  group_by(cand_party_affiliation.x, incumbent) %>%
+  summarize(
+   total_pac_money = sum(total),
+    number_of_pacs= n()
+)
+
+
+graph2 <- ggplot(ah, aes(x=number_of_pacs, y=total_pac_money, fill=cand_party_affiliation.x)) +
+  facet_grid(.~incumbent)+
+  geom_bar(stat="identity")+
+  scale_y_continuous(name="Total Super PAC Money (USD)", labels = scales::comma)
+
+graph2
+```
