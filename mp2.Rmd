@@ -58,6 +58,8 @@ View(nona_party_superpac_money)
 
 
 
+
+
 graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
 geom_point() +
 facet_wrap(cand_party_affiliation.x~incumbent)
