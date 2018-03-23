@@ -36,7 +36,7 @@ incumbent_money <- inner_join(candidates_contributions, candidates_votes, by = "
 
 keepsuperpaccommittees <- filter(keepcommittees, cmte_type == "O")
 
-superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by="cmte_id")
+superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by = "cmte_id")
 ```
 ```{r, message=FALSE, warning = FALSE}
 party_superpac_money <- superpac_money %>%
@@ -52,18 +52,18 @@ filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
 
       This next pipeline simply filter the previous data frame so only the two major parties are shown in the graphic. This pipeline also omitted any candidate who had no available data. 
 ```{r, message=FALSE, warning=FALSE}
-graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
+graph1 <- ggplot(nona_party_superpac_money, aes(x = cand_name.x, y = total, col = ge_winner)) +
   geom_point() +  
   xlab("Major Categories")+
   facet_wrap(cand_party_affiliation.x~incumbent)+
-  scale_y_continuous(name="Total Super PAC Money in U.S. Currency", labels = scales::comma)+
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())+
-  scale_color_discrete(name = "Results", labels= c("Lost", "Won"))+
+  scale_y_continuous(name = "Total Super PAC Money in U.S. Currency", labels = scales::comma)+
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())+
+  scale_color_discrete(name = "Results", labels = c("Lost", "Won"))+
   ggtitle("Doomed are the Fuller Pockets") +
   labs(subtitle = "The Relationship Between Party, Incumbency, Super PAC Contributions and Electoral Success") +
-  scale_y_continuous(labels=dollar_format(prefix="$"))
+  scale_y_continuous(labels = dollar_format(prefix = "$"))
 
 graph1
 ```
@@ -82,20 +82,20 @@ amountofpacs_money_perparty <- money_per_party %>%
   group_by(cand_party_affiliation.x, incumbent) %>%
   summarize(
    total_pac_money = sum(total),
-    number_of_pacs= n()
+    number_of_pacs = n()
 )
 
-graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
+graph1 <- ggplot(nona_party_superpac_money, aes(x = cand_name.x, y = total, col = ge_winner)) +
 geom_point() +
 facet_wrap(cand_party_affiliation.x~incumbent)
 
-graph2 <- ggplot(amountofpacs_money_perparty, aes(x=number_of_pacs, y=total_pac_money, fill=cand_party_affiliation.x)) +
+graph2 <- ggplot(amountofpacs_money_perparty, aes(x = number_of_pacs, y = total_pac_money, fill = cand_party_affiliation.x)) +
   facet_grid(.~incumbent)+
-  geom_bar(stat="identity")+
-  scale_x_continuous(name="Total Number of Super PACs Contributing")+
+  geom_bar(stat = "identity")+
+  scale_x_continuous(name = "Total Number of Super PACs Contributing")+
  scale_fill_manual(values = c("#0000FF",
- "#CC2900"), name = "Party", labels= c("Democrats", "Republicans")) +
-  scale_y_continuous(labels=dollar_format(prefix="$", labels = scales::comma)) +
+ "#CC2900"), name = "Party", labels = c("Democrats", "Republicans")) +
+  scale_y_continuous(labels=dollar_format(prefix = "$", labels = scales::comma)) +
   labs(y = "Total Super PAC Money")
 graph2
 ```
