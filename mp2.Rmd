@@ -60,7 +60,8 @@ graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())+
   scale_color_discrete(name = "Results", labels= c("Lost", "Won"))+
-  ggtitle("Doomed are the Fuller Pockets: The Relationship Between Party, Incumbency, Super PAC Contributions and Electoral Success")
+  ggtitle("Doomed are the Fuller Pockets") +
+  labs(subtitle = "The Relationship Between Party, Incumbency, Super PAC Contributions and Electoral Success")
 
 graph1
 ```
