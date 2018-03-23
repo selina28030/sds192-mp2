@@ -48,7 +48,7 @@ nona_party_superpac_money <- na.omit(party_superpac_money) %>%
 filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
 ```
 
-      This next pipeline simply ffilter the previous data frame so only the two major parties are shown in the graphic. This pipeline also omitted any candidate who had no available data. 
+      This next pipeline simply filter the previous data frame so only the two major parties are shown in the graphic. This pipeline also omitted any candidate who had no available data. 
 ```{r, message=FALSE, warning=FALSE}
 graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
   geom_point() +  
@@ -74,7 +74,7 @@ money_per_party <- superpac_money %>%
   filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
 
 
-ah <- money_per_party %>%
+amountofpacs_money_perparty <- money_per_party %>%
   group_by(cand_party_affiliation.x, incumbent) %>%
   summarize(
    total_pac_money = sum(total),
@@ -85,13 +85,15 @@ graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_
 geom_point() +
 facet_wrap(cand_party_affiliation.x~incumbent)
 
-graph2 <- ggplot(ah, aes(x=number_of_pacs, y=total_pac_money, fill=cand_party_affiliation.x)) +
+graph2 <- ggplot(amountofpacs_money_perparty, aes(x=number_of_pacs, y=total_pac_money, fill=cand_party_affiliation.x)) +
   facet_grid(.~incumbent)+
   geom_bar(stat="identity")+
-  scale_y_continuous(name="Total Super PAC Money (USD)", labels = scales::comma)
+  scale_y_continuous(name="Total Super PAC Money (USD)", labels = scales::comma)+
+  scale_x_continuous(name="Total Number of Super PACs Contributing")+
+  scale_fill_discrete(name = "Party")
 
 graph2
 ```
 
-   Criticisms of Super PACs’ ability to increase the influence of special interests and possibilities for corruption may be legitimate for other elected positions or election years, but a candidate must actually win for this to become a concern. Nevertheless, this may be one of the few issues both parties may agree on since both accept Super PAC contributions, as they both stand to benefit from their continued existence. There is a slight discrepancy in how well-funded these Super PACs are as Republican incumbents and newcomers combined received more in contributions than their Democratic counterparts. Both President Trump and President Obama have shifted positions on this issue from pre-campaign opposition to quiet acceptance. Regardless, the data from this election should urge politicians and their staff to reconsider the strategies of Super PACs and perhaps their efficacy.
+   Criticisms of Super PACs’ ability to increase the influence of special interests and possibilities for corruption may be legitimate for other elected positions or election years, but a candidate must actually win for this to become a concern. Nevertheless, this may be one of the few issues both parties may agree on since both accept Super PAC contributions, as they both stand to benefit from their continued existence. There is a slight discrepancy in how well-funded these Super PACs are as Republican incumbents and newcomers combined received more in contributions than their Democratic counterparts. This can be seen through the height of each of the bar graphs. For the purposes of this blog, the thickness of each of the bar graphs does not contain any information. Both President Trump and President Obama have shifted positions on this issue from pre-campaign opposition to quiet acceptance. Regardless, the data from this election should urge politicians and their staff to reconsider the strategies of Super PACs and perhaps their efficacy.
 
