@@ -24,13 +24,14 @@ keepcandidates <- select(candidates, cand_id, cand_name, cand_party_affiliation,
 
 keepcommittees <- select(committees, cmte_id, cmte_name, cmte_city, cmte_state, cmte_zip, cmte_dsgn, cmte_type, cmte_party_affiliation, cand_id)
 
-wowow <- full_join(keepcontributions, keepcandidates)
+candidates_contributions <- full_join(keepcontributions, keepcandidates)
+
 
 keephouse_elections <- rename(house_elections, cand_id = fec_id)
 
-watwat <- full_join(keephouse_elections, keepcandidates)
+candidates_votes <- full_join(keephouse_elections, keepcandidates)
 
-incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
+incumbent_money <- inner_join(candidates_contributions, candidates_votes, by = "cand_id")
 
 keepsuperpaccommittees <- filter(keepcommittees, cmte_type == "O")
 
