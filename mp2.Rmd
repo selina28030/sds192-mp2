@@ -5,12 +5,6 @@ date: "October 31, 2017"
 output: html_document
 ---
 
-library(tidyverse)
-
-## Loading the data
-
-This project is so interesting and relevant to my life! lol so funny
-
 ```{r, include=FALSE}
 library(tidyverse)
 load("house_elections.rda")
@@ -29,40 +23,14 @@ keepcommittees <- select(committees, cmte_id, cmte_name, cmte_city, cmte_state, 
 
 wowow <- full_join(keepcontributions, keepcandidates)
 
-howhow <- full_join(wowow, keephouse_elections)
-
 keephouse_elections <- rename(house_elections, cand_id = fec_id)
 
 watwat <- full_join(keephouse_elections, keepcandidates)
-watwat %>%
-select(incumbent == "TRUE")
-
-#push push push
-
-View(wowow)
-
-View(wowow)
-View(watwat)
 
 incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
 
-View(incumbent_money)
-ggplot(incumbent_money, aes(x=candidate_name, y = transaction_amt))+
-geom_point()+
-facet_grid(.~incumbent)
-View(watwat)
 
 incumbent_money <- inner_join(wowow, watwat, by = "cand_id")
-
-<<<<<<< HEAD
-View(incumbent_money)
-ggplot(incumbent_money, aes(x=candidate_name, y = transaction_amt))+
-geom_point()+
-facet_grid(.~incumbent)
-=======
-
-ggplot(wowow, aes(x=cand_name, y = transaction_amt))+
-geom_point()
 
 keepsuperpaccommittees <- filter(keepcommittees, cmte_type == "O")
 
@@ -70,16 +38,6 @@ superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by="cmte_id
 
 View(superpac_money)
 
-<<<<<<< HEAD
-
-
->>>>>>> a512c963e19cafeab14e343e20d9248d7f7c6ac6
-=======
-superpac_money_clean <- superpac_money %>%
-group_by(cand_name.x, cmte_id,cmte_name, incumbent) %>%
-summarize(total = sum(transaction_amt))
-View(superpac_money_clean)
-<<<<<<< HEAD
 
 nonasuperpac_money_clean <- na.omit(superpac_money_clean)
 
@@ -89,10 +47,10 @@ ggplot(nona_party_superpac_money, aes(x = cand_name.x, y = total, color = cmte_n
 
   
 party_superpac_money <- superpac_money %>%
-group_by(cand_name.x, cand_party_affiliation.x, incumbent) %>%
+group_by(cand_name.x, cand_party_affiliation.x, incumbent, ge_winner) %>%
 summarize(total = sum(transaction_amt))
 
-
+View(party_superpac_money)
 
 nona_party_superpac_money <- na.omit(party_superpac_money) %>%
 filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
@@ -100,12 +58,8 @@ View(nona_party_superpac_money)
 
 
 
-graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total)) +
+graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
 geom_point() +
 facet_wrap(cand_party_affiliation.x~incumbent)
 
-
 graph1
-=======
->>>>>>> f6f9127d94d0bde2b9bb336e473c28ac892214f6
->>>>>>> 891fc0b7ab5c29a06a435a633ddd1e125edf0059
