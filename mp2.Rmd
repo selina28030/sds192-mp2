@@ -90,15 +90,18 @@ ggplot(nona_party_superpac_money, aes(x = cand_name.x, y = total, color = cmte_n
   
 party_superpac_money <- superpac_money %>%
 group_by(cand_name.x, cand_party_affiliation.x, incumbent) %>%
-summarize(total = sum(transaction_amt))
+summarize(total = sum(transaction_amt))%>%
 
-eh <- party_superpac_money %>%
--filter(cand_party_affiliation.x == "REP", "DEM")
 
-nona_party_superpac_money <- na.omit(party_superpac_money)
+
+nona_party_superpac_money <- na.omit(party_superpac_money) %>%
+filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
 View(nona_party_superpac_money)
 
-nona_party_superpac_money 
+well <- nona_party_superpac_money %>%
+
+
+View(well)
 
 graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total)) +
 geom_point() +
