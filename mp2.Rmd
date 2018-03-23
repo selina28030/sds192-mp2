@@ -15,7 +15,8 @@ load("candidates.rda")
 load("committees.rda")
 load("contributions.rda")
 ```
-
+        
+   For this project, we have decided to look at the amount of money Super PACS have contributed to each candidate for the 2011-2012 general election cycle. The Super PACs are able to raise an unlimited amount of funds due to the Supreme Court decision in the Citizens United vs. Federal Election Committee case, but are not allowed to donate directly to a specific political candidate or campaign. However, Super PACs still are able to support candidates just without “coordinating” with them. Therefore, the next questions that arises about these controversial entities is who these Super PACs decide to support. We were also curious about the implications of our data on how partisanship might shape the debate on the possible disproportionate influence of Super PACs. We decided to filter out all the unnecessary information from four of the dataframes: house_elections, contributions, committees, candidates, except for individuals (since we’re focusing Super PACs). Our final dataframe consisted of candidate name (from the Democratic and Republican parties), their affiliation, whether they were an incumbent, whether they won or lost, and the total amount they each received from Super PACs, excluding candidates who did not receive Super PAC contributions.
 ```{r, message=FALSE, warning = FALSE}
 keepcontributions <- select(contributions, cmte_id, transaction_pgi, entity_type, name, city, state, zip_code, transaction_dt, transaction_amt, other_id, cand_id)
 
@@ -39,10 +40,16 @@ superpac_money <- left_join(keepsuperpaccommittees, incumbent_money, by="cmte_id
 party_superpac_money <- superpac_money %>%
 group_by(cand_name.x, cand_party_affiliation.x, incumbent, ge_winner) %>%
 summarize(total = sum(transaction_amt))
+```
 
+      This first pipeline between superpac_money and group_by is used to truncate the data so that each candidate has only one row of data points. This is then followed by summarizing the total amount of money all the Super PACs combined gave to one candidate. This allowed for the data to be tidier and easier to graph. 
+```{r, message=FALSE, warning=FALSE}
 nona_party_superpac_money <- na.omit(party_superpac_money) %>%
 filter(cand_party_affiliation.x == "REP"|cand_party_affiliation.x == "DEM")
+```
 
+      This next pipeline simply ffilter the previous data frame so only the two major parties are shown in the graphic. This pipeline also omitted any candidate who had no available data. 
+```{r, message=FALSE, warning=FALSE}
 graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
   geom_point() +  
   xlab("Major Categories")+
@@ -56,7 +63,9 @@ graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_
 
 graph1
 ```
-For this project, we have decided to look at the amount of money Super PACS have contributed to each candidate for the 2011-2012 general election cycle. The Super PACs are able to raise an unlimited amount of funds due to the Supreme Court decision in the Citizens United vs. Federal Election Committee case, but are not allowed to donate directly to a specific political candidate or campaign. However, Super PACs still are able to support candidates just without “coordinating” with them. Therefore, the next questions that arises about these controversial entities is who these Super PACs decide to support. We were also curious about the implications of our data on how partisanship might shape the debate on the possible disproportionate influence of Super PACs. We decided to filter out all the unnecessary information from four of the dataframes: house_elections, contributions, committees, candidates, except for individuals (since we’re focusing Super PACs). Our final dataframe consisted of candidate name (from the Democratic and Republican parties), their affiliation, whether they were an incumbent, whether they won or lost, and the total amount they each received from Super PACs, excluding candidates who did not receive Super PAC contributions. As expected, newcomers were more likely to lose than incumbents, but there were unexpected correlations when that was scrutinized along with contribution amount. For incumbents of both parties, candidates who spent more money ended up losing. But there was a significant difference in the relationship of contribution and result for newcomers between the two parties; contribution amount did not correlate to either result for Republican candidates, but for Democrats, candidates who spent more were more likely to win. 
+
+   As expected, newcomers were more likely to lose than incumbents, but there were unexpected correlations when that was scrutinized along with contribution amount. For incumbents of both parties, candidates who spent more money ended up losing. But there was a significant difference in the relationship of contribution and result for newcomers between the two parties; contribution amount did not correlate to either result for Republican candidates, but for Democrats, candidates who spent more were more likely to win. It seems that the expectation that more money equates to more winning applied only to Democratic newcomers, though there were more Republican candidates with Super PAC contributions than Democrats (174 versus 120) and the largest contribution was made to a Democratic candidate.
+
 ```{r, message=FALSE}
 money_per_party <- superpac_money %>%
   group_by(cand_party_affiliation.x, incumbent, cmte_id) %>%
@@ -72,14 +81,9 @@ ah <- money_per_party %>%
     number_of_pacs= n()
 )
 
-<<<<<<< HEAD
-
-
 graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_winner)) +
 geom_point() +
 facet_wrap(cand_party_affiliation.x~incumbent)
-=======
->>>>>>> 614315cdb27635e861885ef5918d8c70d5a7ae5b
 
 graph2 <- ggplot(ah, aes(x=number_of_pacs, y=total_pac_money, fill=cand_party_affiliation.x)) +
   facet_grid(.~incumbent)+
@@ -89,4 +93,5 @@ graph2 <- ggplot(ah, aes(x=number_of_pacs, y=total_pac_money, fill=cand_party_af
 graph2
 ```
 
-It seems that the expectation that more money equates to more winning applied only to Democratic newcomers, though there were more Republican candidates with Super PAC contributions than Democrats (174 versus 120) and the largest contribution was made to a Democratic candidate. Criticisms of Super PACs’ ability to increase the influence of special interests and possibilities for corruption may be legitimate for other elected positions or election years, but a candidate must actually win for this to become a concern. Nevertheless, this may be one of the few issues both parties may agree on since both accept Super PAC contributions, as they both stand to benefit from their continued existence. There is a slight discrepancy in how well-funded these Super PACs are as Republican incumbents and newcomers combined received more in contributions than their Democratic counterparts. Both President Trump and President Obama have shifted positions on this issue from pre-campaign opposition to quiet acceptance. Regardless, the data from this election should urge politicians and their staff to reconsider the strategies of Super PACs and perhaps their efficacy.
+   Criticisms of Super PACs’ ability to increase the influence of special interests and possibilities for corruption may be legitimate for other elected positions or election years, but a candidate must actually win for this to become a concern. Nevertheless, this may be one of the few issues both parties may agree on since both accept Super PAC contributions, as they both stand to benefit from their continued existence. There is a slight discrepancy in how well-funded these Super PACs are as Republican incumbents and newcomers combined received more in contributions than their Democratic counterparts. Both President Trump and President Obama have shifted positions on this issue from pre-campaign opposition to quiet acceptance. Regardless, the data from this election should urge politicians and their staff to reconsider the strategies of Super PACs and perhaps their efficacy.
+
