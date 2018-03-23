@@ -10,6 +10,7 @@ output:
 
 ```{r, include=FALSE}
 library(tidyverse)
+library(scales)
 load("house_elections.rda")
 load("candidates.rda")
 load("committees.rda")
@@ -61,7 +62,8 @@ graph1 <- ggplot(nona_party_superpac_money, aes(x=cand_name.x, y= total, col=ge_
         axis.ticks.x=element_blank())+
   scale_color_discrete(name = "Results", labels= c("Lost", "Won"))+
   ggtitle("Doomed are the Fuller Pockets") +
-  labs(subtitle = "The Relationship Between Party, Incumbency, Super PAC Contributions and Electoral Success")
+  labs(subtitle = "The Relationship Between Party, Incumbency, Super PAC Contributions and Electoral Success") +
+  scale_y_continuous(labels=dollar_format(prefix="$"))
 
 graph1
 ```
@@ -92,7 +94,8 @@ graph2 <- ggplot(amountofpacs_money_perparty, aes(x=number_of_pacs, y=total_pac_
   geom_bar(stat="identity")+
   scale_y_continuous(name="Total Super PAC Money (USD)", labels = scales::comma)+
   scale_x_continuous(name="Total Number of Super PACs Contributing")+
-  scale_fill_discrete(name = "Party")
+  scale_fill_discrete(name = "Party") +
+  scale_y_continuous(labels=dollar_format(prefix="$"))
 
 graph2
 ```
