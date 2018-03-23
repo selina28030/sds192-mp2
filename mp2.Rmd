@@ -95,8 +95,9 @@ graph2 <- ggplot(amountofpacs_money_perparty, aes(x=number_of_pacs, y=total_pac_
   scale_y_continuous(name="Total Super PAC Money (USD)", labels = scales::comma)+
   scale_x_continuous(name="Total Number of Super PACs Contributing")+
   scale_fill_discrete(name = "Party") +
-  scale_y_continuous(labels=dollar_format(prefix="$"))
-
+  scale_y_continuous(labels=dollar_format(prefix="$"))+
+ scale_fill_manual(values = c("#0000FF",
+ "#CC2900"))
 graph2
 ```
 
